@@ -69,9 +69,8 @@ export const cartSlice = createSlice({
                 state.cartItems[existingOrderIndex].quantity++;
             } else {
                 state.cartItems.push({ ...newOrder, quantity: 1 });
+                state.totalQuantity++;
             }
-
-            state.totalQuantity++;
         })               
         .addCase(removeFromCart.fulfilled, (state, action)=>{
             const {id} = action.payload
@@ -94,7 +93,12 @@ export const cartSlice = createSlice({
             const existingOrderIndex = state.cartItems.findIndex(item => item.id === newOrder.id);
         
             if (existingOrderIndex !== -1) {
-                state.cartItems[existingOrderIndex].quantity--;
+                if(state.cartItems[existingOrderIndex].quantity > 1){
+                    state.cartItems[existingOrderIndex].quantity--;
+                }
+                else{
+                    state.cartItems = state.cartItems.filter((item)=> item.id !== newOrder.id)
+                }
             } 
         })
     }

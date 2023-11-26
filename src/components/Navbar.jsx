@@ -53,7 +53,7 @@ const TopNav = () => {
           <span className="font-bold">Eats</span>
         </h1>
       </div>
-      <div className="flex bg-gray-200 rounded-lg ">
+      <div className="flex bg-gray-200 rounded-lg ml-28">
       <AiOutlineSearch size={25} className="text-green-600 mt-2"/>
         <input
           className="bg-transparent p-2 border-none focus:outline-none w-72"
@@ -73,7 +73,9 @@ const TopNav = () => {
         {username && 
         <Link className="m-2 text-green-600 font-semibold cursor-pointer" onClick={handleClick} >Logout</Link> }
          {username && <span>{username}</span>}
-        {username &&  <Link className="link m-2" to="/cart"><ShoppingCartOutlined/></Link>}
+        {username &&  
+        <Link className="link m-2" to="/cart">
+        <ShoppingCartOutlined/><span className="text-orange-600">{totalQuantity}</span></Link>}
         {!username &&  <Link className="link m-2" onClick={handleAlert}><ShoppingCartOutlined/></Link>}
       </nav>
 

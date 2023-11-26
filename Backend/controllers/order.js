@@ -82,12 +82,25 @@ export const increaseQuantity = (req, res) =>{
 };
 
 export const decreaseQuantity = (req, res) =>{
-  const query = "UPDATE orders SET quantity = quantity - ? WHERE id =?";
-  const quantityId = req.params.id;
-  const quantity = req.body.quantity;
+ const quantityId = req.params.id;
+ const quantity = req.body.quantity;
+ const query = "SELECT * FROM orders WHERE quantity <= 1 and id = ?";
 
-  db.query(query, [quantity,quantityId], (err,data)=>{
-    if(err) return res.status(500).json(err);
-    return res.json(data)
-  })
+ db.query(query, [quantityId], (err, data)=>{
+  if(err) return res.status(500).json(err)
+  if(data.length > 0){
+    const query = "DELETE FROM orders WHERE id =?"
+    db.query(query, [quantityId], (err, data)=>{
+      if(err) return res.status(500).json(err)
+      return res.json(data)
+    })
+  }
+  else{
+    const query = "UPDATE orders SET quantity = quantity - ? WHERE id =?";
+    db.query(query, [quantity,quantityId], (err,data)=>{
+      if(err) return res.status(500).json(err);
+      return res.json(data)
+    })
+  }
+ })
 }
