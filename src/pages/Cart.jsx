@@ -3,6 +3,7 @@ import {MdDelete} from 'react-icons/md';
 import { useDispatch } from 'react-redux';
 import { removeFromCart } from '../store/cart';
 import { increaseQuantity } from '../store/cart';
+import { decreaseQuantity } from '../store/cart';
 
 
 const Cart = ({id,name,price,image,quantity,totalPrice}) => {
@@ -11,6 +12,9 @@ const Cart = ({id,name,price,image,quantity,totalPrice}) => {
 
   const handleIncrement = () =>{
     dispatch(increaseQuantity({id:id, quantity:1}))
+  }
+  const handleDecrement = () =>{
+    dispatch(decreaseQuantity({id:id, quantity:1}))
   }
   const deleteFromCart = () =>{
     dispatch(removeFromCart({id:id}))
@@ -35,7 +39,7 @@ const Cart = ({id,name,price,image,quantity,totalPrice}) => {
       </div>
       <div className='flex w-'>
         <MdDelete onClick={deleteFromCart} color="red" className='m-6 text-2xl w-28 cursor-pointer'/>
-        <button className='h-8 bg-green-600 border-green-600 text-white m-4 mt-5'>-</button>
+        <button onClick={handleDecrement} className='h-8 bg-green-600 border-green-600 text-white m-4 mt-5'>-</button>
         <p className='m-5'>{quantity}</p>
         <button onClick={handleIncrement} className='h-8 bg-green-600 border-green-600 text-white m-4 mt-5'>+</button>
       </div>

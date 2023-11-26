@@ -40,8 +40,6 @@ export const addToCart = (req, res) => {
   };
   
 
-
-
 export const getOrders = (req, res) =>{
     const query = "SELECT * FROM orders WHERE user_id = ?";
     const userId = req.params.user_id
@@ -74,6 +72,17 @@ export const removeOrder = (req, res) =>{
 
 export const increaseQuantity = (req, res) =>{
   const query = "UPDATE orders SET quantity = quantity + ? WHERE id =?";
+  const quantityId = req.params.id;
+  const quantity = req.body.quantity;
+
+  db.query(query, [quantity,quantityId], (err,data)=>{
+    if(err) return res.status(500).json(err);
+    return res.json(data)
+  })
+};
+
+export const decreaseQuantity = (req, res) =>{
+  const query = "UPDATE orders SET quantity = quantity - ? WHERE id =?";
   const quantityId = req.params.id;
   const quantity = req.body.quantity;
 

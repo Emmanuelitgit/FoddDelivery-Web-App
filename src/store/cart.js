@@ -31,15 +31,23 @@ export const removeFromCart = createAsyncThunk("remove", async(id)=>{
     }
 });
 
-export const increaseQuantity = createAsyncThunk("increase", async(quantity)=>{
+export const increaseQuantity = createAsyncThunk("increase", async(increaseValue)=>{
     try{
-        await axios.put(`http://localhost:5000/increaseQuantity/${quantity.id}`, quantity);
-        return quantity
+        await axios.put(`http://localhost:5000/increaseQuantity/${increaseValue.id}`, increaseValue);
+        return increaseValue
     }catch(err){
         console.log(err)
     }
 })
 
+export const decreaseQuantity = createAsyncThunk("decrease", async(decreaseValue)=>{
+    try{
+        await axios.put(`http://localhost:5000/decreaseQuantity/${decreaseValue.id}`, decreaseValue);
+        return decreaseValue
+    }catch(err){
+        console.log(err)
+    }
+})
 
 export const cartSlice = createSlice({
     name: "cart",
@@ -72,6 +80,22 @@ export const cartSlice = createSlice({
             if(existingcartItems){
                 state.cartItems = state.cartItems.filter((item)=> item.id !== id)
             }
+        })
+        .addCase(increaseQuantity.fulfilled, (state, action)=>{
+            const newOrder = action.payload;
+            const existingOrderIndex = state.cartItems.findIndex(item => item.id === newOrder.id);
+        
+            if (existingOrderIndex !== -1) {
+                state.cartItems[existingOrderIndex].quantity++;
+            } 
+        })
+        .addCase(decreaseQuantity.fulfilled, (state, action)=>{
+            const newOrder = action.payload;
+            const existingOrderIndex = state.cartItems.findIndex(item => item.id === newOrder.id);
+        
+            if (existingOrderIndex !== -1) {
+                state.cartItems[existingOrderIndex].quantity--;
+            } 
         })
     }
 })
